@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}Логин{%endblock%}
-{% block body %}
-<div style="color: red; font-size:30px; font-family:'Source Code Pro', monospace; align-self:center;">
-    В РАЗРАБОТКЕ
+{% block title %}Вход в ass{%endblock%}
+{%block body%}
+<div style="align-center">
+  <div style="card-group">
+    <div class="card">
+      <img src="">
+      <div class="card-body">
+        <h5 class="card-title">Войдите в свой аккаунт</h5>
+        <form action="" method="post">
+          <p class="card-text">
+            <input type="text" class="form-control" placeholder="login" name="login"><br>
+            <input type="password" class="form-control" placeholder="password" name="password"><br>
+            <button class="btn btn-primary" type="submit">Отправить</button>
+          </p>
+      </form>
+        <small class="text-muted fw-light"><a href="/register">Нет аккаунта? зарегистрируйтесь!</a></small>
+    </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
