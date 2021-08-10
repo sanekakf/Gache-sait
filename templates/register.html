@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация{%endblock%}
+{%block body%}
+<div style="align-center">
+  <div style="card-group">
+    <div class="card">
+      <img src="">
+      <div class="card-body">
+        <h5 class="card-title">Регистрация</h5>
+        <form action="" method="post">
+          <p class="card-text">
+            <input type="text" class="form-control" placeholder="login" name="login">
+            <input type="password" class="form-control" placeholder="password" name="password">
+            <button class="btn btn-primary" type="submit">Отправить</button>
+          </p>
+      </form>
+    </div>
+      <!--<form action="" method="post">
+                <h1>Время написать новую новость?</h1>
+                <div class="form-floating">
+                    <label style='font-size: large;' for="timex">Новость:</label>
+                    <div>
+                        <textarea style='width: 80%; margin-left: 10%;' class="form-control" name='timex' placeholder="Скорее отправляй" id="floatingTextarea"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Отправить</button>
+      </form>-->
+    </div>
+  </div>
+</div>
+{% endblock %}

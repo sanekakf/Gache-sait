@@ -1,7 +1,7 @@
 # Основа для сайта, серверная часть
 
 from os import name
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -24,6 +24,16 @@ def about():
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    if request.method == 'POST':
+        login=request.form.get('login')
+        password=request.form.get('password')
+        datas={'login':login , 'password':password}
+        print(datas)
+    return render_template('register.html')
 
 
 @app.route('/update')
