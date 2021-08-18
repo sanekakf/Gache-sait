@@ -1,5 +1,4 @@
 # Основа для сайта, серверная часть
-
 from flask import Flask, render_template, request, flash, redirect
 import psycopg2 as ps
 import psycopg2.extras
@@ -77,6 +76,12 @@ def register():
 @app.route('/update')
 def update():
     return render_template('update_log.html')
+
+
+# обработка ошибочных страниц
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.ht'), 404
 
 
 if __name__ == '__main__':
