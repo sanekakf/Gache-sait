@@ -41,18 +41,21 @@ def login():
             name = request.form.get('login')
             password = request.form.get('password')
             try:
-                cur.execute('SELECT * FROM users WHERE login=' + name)
-                user = cur.fetchall()
                 cur.execute('SELECT password FROM users WHERE login = %s', (name,))
                 _pass = cur.fetchall()
                 print(_pass)
                 if _pass[0][0] == password:
+                    cur.execute('SELECT login FROM users WHERE login = %s', (name,))
+                    user = cur.fetchone()
+                    user = user[0]
+                    print(user)
                     flash('Вход был выполнен успешно', category='success')
                     return redirect('/pricing')
 
                 else:
                     flash('Пароль или логин не совпадает', category='error')
-            except Exception:
+            except Exception as e:
+                print(e)
                 flash('Такого аккаунта не существует, создайте его по ссылке ниже', category='error')
     return render_template('login.html')
 
@@ -79,4 +82,5 @@ def update():
 if __name__ == '__main__':
     cur.execute("SELECT * FROM users")
     print(cur.fetchall())
+    # cur.execute('CREATE TABLE IF NOT EXISTS users (login TEXT PRIMARY KEY, password TEXT)')
     app.run(debug=True)
