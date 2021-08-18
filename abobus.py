@@ -81,7 +81,12 @@ def update():
 # обработка ошибочных страниц
 @app.errorhandler(404)
 def not_found_error(error):
-    return render_template('404.ht'), 404
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def server_error(error):
+    return render_template('505.html'), 500
 
 
 if __name__ == '__main__':
