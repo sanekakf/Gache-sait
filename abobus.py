@@ -32,7 +32,7 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/login', methods=['POST','GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         if request.method == 'POST':
@@ -44,7 +44,7 @@ def login():
                 cur.execute('SELECT * FROM users WHERE login=' + name)
                 user = cur.fetchall()
                 cur.execute('SELECT password FROM users WHERE login = %s', (name,))
-                _pass=cur.fetchall()
+                _pass = cur.fetchall()
                 print(_pass)
                 if _pass[0][0] == password:
                     flash('Вход был выполнен успешно', category='success')
@@ -77,7 +77,6 @@ def update():
 
 
 if __name__ == '__main__':
-    cur.execute('DROP TABLE users')
-    cur.execute('CREATE TABLE IF NOT EXISTS users (login TEXT PRIMARY KEY, password TEXT)')
-    conn.commit()
+    cur.execute("SELECT * FROM users")
+    print(cur.fetchall())
     app.run(debug=True)
