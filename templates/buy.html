@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} Войдите в аккаунт {% endblock %}
+{% block body %}
+<div class="px-4 py-5 my-5 text-center border-bottom">
+  <h1 class="display-4 fw-bold">Введите имя аккаунта</h1>
+  <br>
+  <form action="" method="post" class="p-4 p-md-5 border rounded-3 bg-light">
+    <div class="form-floating mb-3">
+      <input  class="form-control" id="floatingInput" placeholder="login" name="login">
+      <label for="floatingInput">Логин</label>
+    </div>
+    <button class="2-100 btn btn-lg btn-outline-success" type="submit">Заказать админку</button>
+    <hr class="my-4"></hr>
+    <small class="text-muted">Администрация не несет ответственность за неправильно указанные данные</small>
+  </form>
+</div>
+{% endblock %}

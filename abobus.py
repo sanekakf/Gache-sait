@@ -40,23 +40,28 @@ def login():
             name = request.form.get('login')
             password = request.form.get('password')
             try:
-                cur.execute('SELECT password FROM users WHERE login = %s', (name,))
-                _pass = cur.fetchall()
-                print(_pass)
-                if _pass[0][0] == password:
-                    cur.execute('SELECT login FROM users WHERE login = %s', (name,))
-                    user = cur.fetchone()
-                    user = user[0]
-                    print(user)
-                    flash('Вход был выполнен успешно', category='success')
-                    return redirect('/pricing')
-
+                cur.execute('SELECT admin FROM users WHERE login = %s', (name,))
+                law = cur.fetchone()
+                law = law[0]
+                if law:
+                    cur.execute('SELECT password FROM users WHERE login = %s', (name,))
+                    _pass = cur.fetchall()
+                    print(_pass)
+                    if _pass[0][0] == password:
+                        cur.execute('SELECT login FROM users WHERE login = %s', (name,))
+                        user = cur.fetchone()
+                        user = user[0]
+                        print(user)
+                        flash('Вход был выполнен успешно', category='success')
+                        return redirect('/admin-page')
+                    else:
+                        flash('Пароль или логин не совпадает', category='error')
                 else:
-                    flash('Пароль или логин не совпадает', category='error')
+                    flash('У вас нет права для перехода на страницу администарции', category='error')
             except Exception as e:
                 print(e)
                 flash('Такого аккаунта не существует, создайте его по ссылке ниже', category='error')
-    return render_template('login.html')
+    return render_template('admin.html')
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -78,9 +83,26 @@ def update():
     return render_template('update_log.html')
 
 
-@app.route('/admin')
+@app.route('/buy', methods=['POST', 'GET'])
+def buy():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        try:
+            cur.execute('SELECT login FROM users WHERE login = %s', (login,))
+
+            cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True,login,))
+            conn.commit()
+            flash('Админка была выдана удачно', category='success')
+            redirect('/admin-page')
+        except Exception as e:
+            print(e)
+            flash('Такого пользователя не существует', category='error')
+    return render_template('buy.html')
+
+
+@app.route('/admin-page')
 def admin():
-    return render_template('admin.html')
+    return render_template('admin-page.html')
 
 
 # обработка ошибочных страниц
