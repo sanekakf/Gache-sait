@@ -64,7 +64,7 @@ def register():
     if request.method == 'POST':
         name = request.form.get('login')
         password = request.form.get('password')
-        cur.execute('INSERT INTO users VALUES (%s,%s)', (str(name), str(password)))
+        cur.execute('INSERT INTO users VALUES (%s,%s,%s)', (str(name), str(password), False))
         conn.commit()
         cur.execute('SELECT * FROM users')
         print(cur.fetchall())
@@ -76,6 +76,11 @@ def register():
 @app.route('/update')
 def update():
     return render_template('update_log.html')
+
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
 
 
 # обработка ошибочных страниц
