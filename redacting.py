@@ -20,9 +20,13 @@ def clear():
 
 
 def delete():
-    cur.execute("DROP TABLE users")
-    conn.commit()
-    print("Готово\n")
+    try:
+        cur.execute("DROP TABLE users")
+        conn.commit()
+        print("Готово\n")
+    except Exception as e:
+        print(e)
+        print('\nОшибка')
 
 
 def create():
