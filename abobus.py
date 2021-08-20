@@ -87,20 +87,21 @@ def update():
 def buy():
     if request.method == 'POST':
         login = request.form.get('login')
-        try:
-            cur.execute('SELECT login FROM users WHERE login = %s', (login,))
-
+        cur.execute('SELECT login FROM users WHERE login = %s', (login,))
+        user = cur.fetchone()
+        print(user)
+        if user is None:
+            flash('Такого пользователя не существует', category='error')
+        else:
             cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True,login,))
             conn.commit()
             flash('Админка была выдана удачно', category='success')
             redirect('/admin-page')
-        except Exception as e:
-            print(e)
-            flash('Такого пользователя не существует', category='error')
+
     return render_template('buy.html')
 
 
-@app.route('/admin-page')
+@app.route('/admin-page', methods=['POST', 'GET'])
 def admin():
     return render_template('admin-page.html')
 
