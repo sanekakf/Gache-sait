@@ -57,7 +57,7 @@ def login():
                     else:
                         flash('Пароль или логин не совпадает', category='error')
                 else:
-                    flash('У вас нет права для перехода на страницу администарции', category='error')
+                    flash('У вас нет права для перехода на страницу администрации', category='error')
             except Exception as e:
                 print(e)
                 flash('Такого аккаунта не существует, создайте его по ссылке ниже', category='error')
@@ -93,7 +93,7 @@ def buy():
         if user is None:
             flash('Такого пользователя не существует', category='error')
         else:
-            cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True,login,))
+            cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True, login,))
             conn.commit()
             flash('Админка была выдана удачно', category='success')
             redirect('/admin-page')
