@@ -1,1 +1,1 @@
-web: gunicorn gunicorn:app
+web: gunicorn abobus:app --preload
