@@ -20,7 +20,8 @@ db_info = {
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'aboba'
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://lfcjpjxpmcfqxi:70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b@ec2-54-170-163-224.eu-west-1.compute.amazonaws.com:5432/df043ppajn3au9"
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = "postgresql://lfcjpjxpmcfqxi:70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b@ec2-54-170-163-224.eu-west-1.compute.amazonaws.com:5432/df043ppajn3au9"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -42,7 +43,7 @@ class User(db.Model, UserMixin):
         return (self.id)
 
     def __repr__(self):
-        abobus={
+        abobus = {
             'login': self.login,
             'password': self.password,
             'id': self.id
@@ -155,7 +156,7 @@ def admin():
 @app.route('/home/<string:login>/', methods=['POST', 'GET'])
 @login_required
 def user_home(login):
-    citats=[
+    citats = [
         'Устал после gym? Присаживайся и выпей чашечку cum!',
         'Задолбали fucking slaves? Болит рука? Сходи к Jabronies!',
         'Завтра снова в gym, а накопленного cum не хватает?\nВ  нашем магазине есть много cum по выгодным скидкам!',
@@ -181,12 +182,14 @@ if __name__ == '__main__':
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
     login_manager.init_app(app)
+    print(login_manager)
+
 
     @login_manager.user_loader
     def load_user(user_id):
-        # try:
+        try:
             return User.query.get(user_id)
-        # except:
-        #     return None
+        except:
+            return None
 
     app.run(debug=True)
