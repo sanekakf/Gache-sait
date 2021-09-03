@@ -1,1 +1,1 @@
-web: hypercorn abobus:app --preload
+web: hypercorn abobus:app
