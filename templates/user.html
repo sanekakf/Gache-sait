@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}{{nickname}}{% endblock %}
+{% block body %}
+<!--  <div class="px-4 pt-5 my-5 text-center border-bottom">
+   <h1 class="display-4 fw-bold">Приветствуем тебя, {{nickname}}</h1>
+   <div class="col-lg-6 mx-auto">
+     <p class="lead mb-4">{{ment}}</p>
+     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+          <a href="/pricing" class="btn btn-danger btn-lg px-4 me-sm-3 disabled"><span style="font-family:'Source Code Pro', monospace;" title="В разработке...">$ BUCKS $</span></a>
+          <a href="/logout" class="btn btn-outline-info btn-lg px-4 me-sm-3">Выйти с аккаунта</a>
+     </div>
+    </div>
+    <div class="overflow-hidden" style="max-height: 30vh;">
+      <div class="container px-5">
+        <img src="https://steamuserimages-a.akamaihd.net/ugc/1290793614551278403/0A3A74BCB71732B048F52C5AF6D27B1D4EFEF757/" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Дружная фотка" width="700" height="700" loading="lazy">
+      </div>
+    </div>
+  </div>-->
+<div class="container col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img src="https://steamuserimages-a.akamaihd.net/ugc/1290793614551278403/0A3A74BCB71732B048F52C5AF6D27B1D4EFEF757/" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="800" height="800" loading="lazy">
+      </div>
+      <div class="col-lg-6">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Приветствуем тебя, {{nickname}}</h1>
+        <p class="lead"><span style="font-family:'Pacifico', serif">Цитата дня:<br></span><span style="font-family: 'Roboto Mono', monospace;">{{ment}}</span></p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <a href="/pricing" class="btn btn-danger btn-lg px-4 me-sm-3 disabled"><span style="font-family:'Source Code Pro', monospace;" title="В разработке...">$BUCKS$</span></a>
+          <a href="/logout" class="btn btn-outline-secondary btn-lg px-4 me-sm-3">Выйти с аккаунта</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
