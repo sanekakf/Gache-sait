@@ -8,9 +8,8 @@
 from flask import Flask, render_template, request, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import UserMixin, login_required, logout_user, current_user, LoginManager
+from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
 from random import randint, choice
-from flask_login.utils import login_user
 
 db_info = {
     'user': 'lfcjpjxpmcfqxi',
