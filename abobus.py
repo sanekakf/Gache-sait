@@ -179,7 +179,7 @@ def server_error(error):
 
 if __name__ == '__main__':
     db.session.flush()
-    login_manager = LoginManager()
+    login_manager = LoginManager(app)
     login_manager.login_view = "login"
 
     @login_manager.user_loader
