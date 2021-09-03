@@ -83,7 +83,6 @@ def login():
                         flash('Пароль или логин неверен', category='error')
                 except Exception as e:
                     print(e)
-                    raise 505
             else:
                 flash('Аккаунта не существует, зарегистрируйтесь по ссылке ниже', category='error')
         except Exception as e:
