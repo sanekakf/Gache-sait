@@ -1,1 +1,1 @@
-web: gunicorn gunicorn:app --debug
+web: gunicorn gunicorn:app
