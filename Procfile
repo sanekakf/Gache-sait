@@ -1,1 +1,1 @@
-web: hypercorn abobus:app --port:$PORT
+web: gunicorn abobus:app
