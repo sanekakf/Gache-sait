@@ -178,15 +178,15 @@ def server_error(error):
 
 if __name__ == '__main__':
     db.session.flush()
-    login_manager = LoginManager()
+    login_manager = LoginManager(app)
     login_manager.login_view = 'login'
     login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
-        try:
+        # try:
             return User.query.get(user_id)
-        except:
-            return None
+        # except:
+        #     return None
 
     app.run(debug=True)
