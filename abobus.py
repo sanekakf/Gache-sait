@@ -103,7 +103,7 @@ def register():
             if user:
                 flash('Аккаунт уже существует', category='error')
             else:
-                # try:
+                try:
                     new_user = User(id=randint(1, 99999), login=name, password=password)
                     login_user(new_user, remember=True)
                     print(new_user)
@@ -111,8 +111,9 @@ def register():
                     db.session.commit()
                     flash('Аккаунт успешно создан', category='success')
                     return redirect(f'/home/{new_user.login}')
-                # except Exception as e:
-                #     print(e)
+                except Exception as e:
+                    flash(f'Ошибка на сервере: {e}', category='error')
+                    print(e)
         except Exception as e:
             print(e)
             flash('Аккаунт уже существует', category='error')
