@@ -7,3 +7,4 @@ Flask-Login
 SQLAlchemy
 flask-sqlalchemy
 Flask-Migrate
+hypercorn
