@@ -1,109 +1,169 @@
 # Основа для сайта, серверная часть
+# import psycopg2 as ps
+# import psycopg2.extras
+# DB_HOST = 'ec2-54-170-163-224.eu-west-1.compute.amazonaws.com'
+# DB_NAME = 'df043ppajn3au9'
+# DB_USER = 'lfcjpjxpmcfqxi'
+# DB_PASS = '70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b'
 from flask import Flask, render_template, request, flash, redirect
-import psycopg2 as ps
-import psycopg2.extras
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
+from random import randint, choice
 
+db_info = {
+    'user': 'lfcjpjxpmcfqxi',
+    'password': '70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b',
+    'host': 'ec2-54-170-163-224.eu-west-1.compute.amazonaws.com',
+    'db_name': 'df043ppajn3au9'
+}
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'aboba'
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = "postgresql://lfcjpjxpmcfqxi:70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b@ec2-54-170-163-224.eu-west-1.compute.amazonaws.com:5432/df043ppajn3au9"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
-DB_HOST = 'ec2-54-170-163-224.eu-west-1.compute.amazonaws.com'
-DB_NAME = 'df043ppajn3au9'
-DB_USER = 'lfcjpjxpmcfqxi'
-DB_PASS = '70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b'
-conn = ps.connect(dbname=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST)
-cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    login = db.Column(db.String(), unique=True)
+    password = db.Column(db.String())
+
+    def __init__(self, id, login, password):
+        self.id = id
+        self.login = login
+        self.password = password
+
+    def get_id(self):
+        return (self.id)
+
+    def __repr__(self):
+        abobus = {
+            'login': self.login,
+            'password': self.password,
+            'id': self.id
+        }
+        return f'{self.login}'
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('main.html')
+    return render_template('main.html', user=current_user)
 
 
-@app.route('/pricing')
+@app.route('/pricing', methods=['POST', 'GET'])
 def pricing():
-    return render_template('pricing.html')
+    return render_template('pricing.html', user=current_user)
 
 
-@app.route('/about')
+@app.route('/about', methods=['POST', 'GET'])
 def about():
-    return render_template('about.html')
+    return render_template('about.html', user=current_user)
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        if request.method == 'POST':
-            cur.execute('SELECT * FROM users')
-            print(cur.fetchall())
+        try:
             name = request.form.get('login')
             password = request.form.get('password')
-            try:
-                cur.execute('SELECT admin FROM users WHERE login = %s', (name,))
-                law = cur.fetchone()
-                law = law[0]
-                if law:
-                    cur.execute('SELECT password FROM users WHERE login = %s', (name,))
-                    _pass = cur.fetchall()
-                    print(_pass)
-                    if _pass[0][0] == password:
-                        cur.execute('SELECT login FROM users WHERE login = %s', (name,))
-                        user = cur.fetchone()
-                        user = user[0]
-                        print(user)
-                        flash('Вход был выполнен успешно', category='success')
-                        return redirect('/admin-page')
+            user = User.query.filter_by(login=name).first()
+            if user:
+                try:
+                    if user.password == password:
+                        login_user(user)
+                        flash('Вход успешен', category='success')
+                        return redirect(f'/home/{user.login}')
                     else:
-                        flash('Пароль или логин не совпадает', category='error')
-                else:
-                    flash('У вас нет права для перехода на страницу администрации', category='error')
-            except Exception as e:
-                print(e)
-                flash('Такого аккаунта не существует, создайте его по ссылке ниже', category='error')
-    return render_template('admin.html')
+                        flash('Пароль или логин неверен', category='error')
+                except Exception as e:
+                    print(e)
+            else:
+                flash('Аккаунта не существует, зарегистрируйтесь по ссылке ниже', category='error')
+        except Exception as e:
+            print(e)
+            flash('Error', category='error')
+            raise 505
+    return render_template('admin.html', user=current_user)
 
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        name = request.form.get('login')
-        password = request.form.get('password')
-        cur.execute('INSERT INTO users VALUES (%s,%s,%s)', (str(name), str(password), False))
-        conn.commit()
-        cur.execute('SELECT * FROM users')
-        print(cur.fetchall())
-        flash('Аккаунт успешно создан', category='success')
-        return redirect('/login')
-    return render_template('register.html')
+        try:
+            name = request.form.get('login')
+            password = request.form.get('password')
+            user = User.query.filter_by(login=name).first()
+            if user:
+                flash('Аккаунт уже существует', category='error')
+            else:
+                try:
+                    new_user = User(id=randint(1, 99999), login=name, password=password)
+                    login_user(new_user, remember=True)
+                    print(new_user)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    flash('Аккаунт успешно создан', category='success')
+                    return redirect(f'/home/{new_user.login}')
+                except Exception as e:
+                    flash(f'Ошибка на сервере: {e}', category='error')
+                    print(e)
+        except Exception as e:
+            print(e)
+            flash('Аккаунт уже существует', category='error')
+    return render_template('register.html', user=current_user)
 
 
-@app.route('/update')
+@app.route('/update', methods=['POST', 'GET'])
 def update():
-    return render_template('update_log.html')
+    return render_template('update_log.html', user=current_user)
 
 
-@app.route('/buy', methods=['POST', 'GET'])
-def buy():
-    if request.method == 'POST':
-        login = request.form.get('login')
-        cur.execute('SELECT login FROM users WHERE login = %s', (login,))
-        user = cur.fetchone()
-        print(user)
-        if user is None:
-            flash('Такого пользователя не существует', category='error')
-        else:
-            cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True, login,))
-            conn.commit()
-            flash('Админка была выдана удачно', category='success')
-            redirect('/admin-page')
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    logout_user()
+    return redirect('/')
 
-    return render_template('buy.html')
+
+# @app.route('/buy', methods=['POST', 'GET'])
+# def buy():
+#     if request.method == 'POST':
+#         login = request.form.get('login')
+#         cur.execute('SELECT login FROM users WHERE login = %s', (login,))
+#         user = cur.fetchone()
+#         print(user)
+#         if user is None:
+#             flash('Такого пользователя не существует', category='error')
+#         else:
+#             cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True, login,))
+#             conn.commit()
+#             flash('Админка была выдана удачно', category='success')
+#             redirect('/admin-page')
+#
+#     return render_template('buy.html')
 
 
 @app.route('/admin-page', methods=['POST', 'GET'])
 def admin():
     return render_template('admin-page.html')
+
+
+@app.route('/home/<string:login>/', methods=['POST', 'GET'])
+@login_required
+def user_home(login):
+    citats = [
+        'Устал после gym? Присаживайся и выпей чашечку cum!',
+        'Задолбали fucking slaves? Болит рука? Сходи к Jabronies!',
+        'Завтра снова в gym, а накопленного cum не хватает?\nВ  нашем магазине есть много cum по выгодным скидкам!',
+        'Эти fucking slaves опять порвали твой bondage? Получи бесплатный в нашем магазине!'
+    ]
+    ment = choice(citats)
+    return render_template('user.html', nickname=login, user=current_user, ment=ment)
 
 
 # обработка ошибочных страниц
@@ -118,7 +178,16 @@ def server_error(error):
 
 
 if __name__ == '__main__':
-    cur.execute("SELECT * FROM users")
-    print(cur.fetchall())
-    # cur.execute('CREATE TABLE IF NOT EXISTS users (login TEXT PRIMARY KEY, password TEXT)')
-    app.run(debug=True)
+    db.session.flush()
+    login_manager = LoginManager(app)
+    login_manager.login_view = "login"
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        try:
+            return User.query.get(user_id)
+        except:
+            return None
+    login_manager.init_app(app)
+
+    app.run(debug=True, host='0.0.0.0')

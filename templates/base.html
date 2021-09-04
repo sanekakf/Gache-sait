@@ -5,14 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--РЕДАКТ САЙТА-->
-    <meta name="description" content="Мы Gacho-Inc. Лучшие среди иных fucking slaves. Bondage, свой billy и многое другое именно тут!">
+    <meta name="description" content="Мы Gacho-Inc. Лучшие среди иных fucking slaves. Bondage, свой billy и многое другое именно тут! Не нравиться? Идите нахуй">
     <meta name="author" content="Мистер Клоун">
     <meta name="keywords" content="Гачи Gachi, gacho, гаче, gay-website">
     <meta name="theme-color" content="#0c00ff">
     <!-- ИКОНКИ -->
-    <link type="image/png" sizes="32x32" rel="icon" href="https://media.discordapp.net/attachments/681524536344182847/877662922535489606/favicon-32x32.png">
-    <link rel="icon" href="https://media.discordapp.net/attachments/681524536344182847/877662920618688592/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="icon" href="favicon.ico">
+    <link rel="shortcut icon" sizes="32x32" href="https://media.discordapp.net/attachments/681524536344182847/877662922535489606/favicon-32x32.png">
     <!-- TITLE -->
     <title>
         {% block title%}{% endblock %}
@@ -23,9 +21,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital@1&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <!-- СТИЛИ -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <!--  BOOTSTRAP JS  -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+    <!-- КАСТОМНЫЕ СТИЛИ -->
+    <style>
+        {% block style %}{% endblock %}
+    </style>
 </head>
 <body>
 
@@ -49,7 +54,21 @@
         <a class="me-3 py-2 text-dark text-decoration-none" href="/about"><i class="fa fa-info-circle" aria-hidden="true"></i>About US</a>
         <a class="me-3 py-2 text-dark text-decoration-none" href="/pricing"><i class="fa fa-usd" aria-hidden="true"></i>Цены на bondage</a>
       </nav>
-      <a class="btn btn-outline-primary" href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Войти</a>
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                {{user}}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="/home/{{user}}">Домой в Gym</a></li>
+                <li><a class="dropdown-item disabled">В разработке...</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout">Выйти из аккаунта</a></li>
+            </ul>
+        </div>
+        {% else %}
+        <a class="btn btn-outline-primary" href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i>Войти</a>
+        {% endif %}
 
     </div>
 
@@ -88,29 +107,14 @@
         <small class="d-block mb-3 text-muted">© 2017–2021</small>
       </div>
       <div class="col-6 col-md">
-        <h5>Features</h5>
+        <h5>Полезные ссылки</h5>
         <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
-        </ul>
-      </div>
-      <div class="col-6 col-md">
-        <h5>Resources</h5>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://discord.gg/yeWmqAMqa5">Наш сервер в Discord</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none disabled">Приложение Gacho-Inc.</a></li>
         </ul>
       </div>
     </div>
   </footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
 </body>
 </html>
