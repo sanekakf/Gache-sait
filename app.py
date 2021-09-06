@@ -5,11 +5,14 @@
 # DB_NAME = 'df043ppajn3au9'
 # DB_USER = 'lfcjpjxpmcfqxi'
 # DB_PASS = '70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b'
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
 from random import randint, choice
+from p_redact import clear as clean
+
+back = '<script>document.location.href = document.referrer</script>'
 
 db_info = {
     'user': 'lfcjpjxpmcfqxi',
@@ -51,6 +54,32 @@ class User(db.Model, UserMixin):
         return f'{self.login}'
 
 
+class Product(db.Model):
+    __tablename__ = 'production'
+
+    name = db.Column(db.String(), unique=True, primary_key=True)
+    price = db.Column(db.String())
+    description = db.Column(db.String())
+    avatarUrl = db.Column(db.String())
+    long = db.Column(db.String())
+    zametki = db.Column(db.String())
+
+    def __init__(self, name, price, description, avatarUrl, long, zametki):
+        self.name = name
+        self.price = price
+        self.description = description
+        self.avatarUrl = avatarUrl
+        self.long = long
+        self.zametki = zametki
+
+    # def __repr__(self):
+    #     abob = [self.name, self.price, self.description, self.avatarUrl, self.long]
+    #     return abob
+    # def __str__(self):
+    #     abob = [self.name, self.price, self.description, self.avatarUrl, self.long]
+    #     return abob
+
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     return render_template('main.html', user=current_user)
@@ -58,7 +87,14 @@ def index():
 
 @app.route('/pricing', methods=['POST', 'GET'])
 def pricing():
-    return render_template('pricing.html', user=current_user)
+    products = Product.query.all()
+    return render_template('pricing.html', user=current_user, products=products)
+
+
+@app.route('/pricing/<string:name>', methods=['POST', 'GET'])
+def product(name):
+    product = Product.query.filter_by(name=name).first()
+    return render_template('product.html', user=current_user, product=product)
 
 
 @app.route('/about', methods=['POST', 'GET'])
@@ -87,8 +123,7 @@ def login():
                 flash('Аккаунта не существует, зарегистрируйтесь по ссылке ниже', category='error')
         except Exception as e:
             print(e)
-            flash('Error', category='error')
-            raise 505
+            flash(f'{e}', category='error')
     return render_template('admin.html', user=current_user)
 
 
@@ -119,6 +154,41 @@ def register():
     return render_template('register.html', user=current_user)
 
 
+@app.route('/redact', methods=['POST', 'GET'])
+def redact():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        object = request.form.get('object')
+        new = request.form.get('new')
+        print(f'{name} \n{object} \n{new}')
+        try:
+            # self.name = name
+            # self.price = price
+            # self.description = description
+            # self.avatarUrl = avatarUrl
+            # self.long = long
+            # self.zametki = zametki
+            product = Product.query.filter_by(name=name).first()
+            if object.lower() == 'name':
+                product.name = new
+            elif object.lower() == 'price':
+                product.price = new
+            elif object.lower() == 'description':
+                product.description = new
+            elif object.lower() == 'url' or 'avatarUrl':
+                product.avatarUrl = new
+            elif object.lower() == 'long':
+                product.long = new
+            elif object.lower() == 'zametki':
+                product.zametki = new
+            db.session.commit()
+            flash('Данные успешно обновлены', category='success')
+        except Exception as e:
+            print(e)
+            flash(e)
+    return render_template('redact.html', user=current_user, products=Product.query.all())
+
+
 @app.route('/update', methods=['POST', 'GET'])
 def update():
     return render_template('update_log.html', user=current_user)
@@ -128,29 +198,6 @@ def update():
 def logout():
     logout_user()
     return redirect('/')
-
-
-# @app.route('/buy', methods=['POST', 'GET'])
-# def buy():
-#     if request.method == 'POST':
-#         login = request.form.get('login')
-#         cur.execute('SELECT login FROM users WHERE login = %s', (login,))
-#         user = cur.fetchone()
-#         print(user)
-#         if user is None:
-#             flash('Такого пользователя не существует', category='error')
-#         else:
-#             cur.execute('UPDATE users SET admin = %s WHERE login = %s', (True, login,))
-#             conn.commit()
-#             flash('Админка была выдана удачно', category='success')
-#             redirect('/admin-page')
-#
-#     return render_template('buy.html')
-
-
-@app.route('/admin-page', methods=['POST', 'GET'])
-def admin():
-    return render_template('admin-page.html')
 
 
 @app.route('/home/<string:login>/', methods=['POST', 'GET'])
@@ -165,6 +212,34 @@ def user_home(login):
     ment = choice(citats)
     return render_template('user.html', nickname=login, user=current_user, ment=ment)
 
+
+@app.route('/home/sanekakf/create', methods=['POST', 'GET'])
+@login_required
+def create_product():
+    if current_user.login != 'sanekakf':
+        raise 404
+    if request.method == 'POST':
+        name = request.form.get('name')
+        price = request.form.get('price')
+        long = request.form.get('long')
+        description = request.form.get('description')
+        zametki = request.form.get('zametka')
+        avatarUrl = request.form.get('url')
+        new_tovar = Product(name=name, price=price, long=long, description=description, zametki=zametki, avatarUrl=avatarUrl)
+        db.session.add(new_tovar)
+        db.session.commit()
+    return render_template('creation.html', user=current_user)
+
+
+@app.route('/home/sanekakf/clear', methods=['POST', 'GET'])
+def clear():
+    clean()
+    return redirect(url_for('pricing'))
+
+
+@app.route('/pictures', methods=['POST', 'GET'])
+def pictures():
+    return render_template('pictures.html', user=current_user)
 
 # обработка ошибочных страниц
 @app.errorhandler(404)

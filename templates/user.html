@@ -28,6 +28,14 @@
           <a href="/pricing" class="btn btn-danger btn-lg px-4 me-sm-3 disabled"><span style="font-family:'Source Code Pro', monospace;" title="В разработке...">$BUCKS$</span></a>
           <a href="/logout" class="btn btn-outline-secondary btn-lg px-4 me-sm-3">Выйти с аккаунта</a>
         </div>
+        {% if nickname == 'sanekakf' %}
+          <hr>
+          <a href="/home/sanekakf/create" class="btn btn-outline-info">Создать новый товар</a>
+<!--          <br>-->
+          <a href="/home/sanekakf/clear" class="btn btn-dark">Очистить список</a>
+        <hr>
+          <a href="/redact" class="btn btn-outline-warning">Редактировать</a>
+        {% endif %}
       </div>
     </div>
   </div>

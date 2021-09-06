@@ -1,1 +1,1 @@
-web: gunicorn abobus:app
+web: python app.py

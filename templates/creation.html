@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %} Создание нового элемента {% endblock %}
+{% block body %}
+<form method="post" action="">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+      <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden ">
+          <div class="rounded-lg-3">
+            <div class="mb-3">
+                <label for="formFiles" class="form-label">Внешний вид <a href="/pictures" class="link-info"><\Картинки\></a></label>
+                <input class="form-control" type="text" id="formFiles" placeholder="Ссылка на Img" name="url">
+            </div>
+          </div>
+      </div>
+      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+        <h1 class="display-4 fw-bold lh-1">
+            <div class="mb-3">
+             <label for="exampleFormControlTextarea1" class="form-label">Имя товара</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" name="name" rows="1"></textarea>
+            </div>
+        </h1>
+          <h2>
+              <div class="row g-3">
+                  <div>Цена\Время</div>
+                  <div class="col">
+                      <input type="text" class="form-control" id="price" name="price">
+                  </div>
+                  <div class="col">
+                      <input type="text" class="form-control" name="long">
+                  </div>
+              </div>
+          </h2>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Описание товара</label>
+            <input type="text" class="form-control" name="description" id="exampleFormControlInput1" placeholder="Много информации">
+        </div>
+        <div class="mb-3">
+            <label for="Zametki" class="form-label">Заметка на товар</label>
+            <input type="text" class="form-control" placeholder="Клеймо на товар" name="zametka" id="Zametki">
+        </div>
+          <hr>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+          <input type="submit" class="btn btn-outline-dark btn-lg px-4 me-md-2 fw-bold" value="Создать">
+        </div>
+      </div>
+    </div>
+</form>
+{% endblock %}

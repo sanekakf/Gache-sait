@@ -10,6 +10,7 @@
     <meta name="keywords" content="Гачи Gachi, gacho, гаче, gay-website">
     <meta name="theme-color" content="#0c00ff">
     <!-- ИКОНКИ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="shortcut icon" sizes="32x32" href="https://media.discordapp.net/attachments/681524536344182847/877662922535489606/favicon-32x32.png">
     <!-- TITLE -->
     <title>
@@ -39,12 +40,13 @@
   <header>
     <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
       <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img">
-          <title>Gacho</title>
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor">
-          </path>
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+              <title>Gacho</title>
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+          </svg>
         <span class="fs-4">Gacho</span>
+
 
       </a>
 
@@ -52,18 +54,22 @@
 <!--        <a class="me-3 py-2 text-dark text-decoration-none" href="/update"><i class="fa fa-newspaper-o" aria-hidden="true"></i>Update log</a>-->
         <a class="me-3 py-2 text-dark text-decoration-none" href="/"><i class="fa fa-home" aria-hidden="true"></i>Главная страничка</a>
         <a class="me-3 py-2 text-dark text-decoration-none" href="/about"><i class="fa fa-info-circle" aria-hidden="true"></i>About US</a>
-        <a class="me-3 py-2 text-dark text-decoration-none" href="/pricing"><i class="fa fa-usd" aria-hidden="true"></i>Цены на bondage</a>
+        <a class="me-3 py-2 text-dark text-decoration-none" href="/pricing"><i class="bi bi-graph-up"></i>Цены на bondage</a>
       </nav>
         {% if user.is_authenticated %}
         <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                {{user}}
+                <i class="fa fa-user-o" aria-hidden="true"></i> {{user}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="/home/{{user}}">Домой в Gym</a></li>
-                <li><a class="dropdown-item disabled">В разработке...</a></li>
+                <li><a class="dropdown-item disabled"><i class="fa fa-address-card-o link-info" aria-hidden="true"></i> В разработке...</a></li>
+                {% if user.login == 'sanekakf' %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item link-danger" href="/home/sanekakf/create"><i class="bi bi-file-plus"></i>Создать товар</a></li>
+                {% endif %}
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/logout">Выйти из аккаунта</a></li>
+                <li><a class="dropdown-item" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Выйти из аккаунта</a></li>
             </ul>
         </div>
         {% else %}
