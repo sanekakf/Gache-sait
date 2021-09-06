@@ -11,6 +11,7 @@ from flask_migrate import Migrate
 from flask_login import UserMixin, login_user, login_required, logout_user, current_user, LoginManager
 from random import randint, choice
 from p_redact import clear as clean
+import os
 
 back = '<script>document.location.href = document.referrer</script>'
 
@@ -22,7 +23,7 @@ db_info = {
 }
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'aboba'
+app.config['SECRET_KEY'] = os.urandom(24)
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = "postgresql://lfcjpjxpmcfqxi:70ec9d90f402e4102fb1ea1d8699a2a0c232034016d6edacd6d681093a20772b@ec2-54-170-163-224.eu-west-1.compute.amazonaws.com:5432/df043ppajn3au9"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
