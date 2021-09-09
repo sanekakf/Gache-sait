@@ -64,14 +64,16 @@ class Product(db.Model):
     avatarUrl = db.Column(db.String())
     long = db.Column(db.String())
     zametki = db.Column(db.String())
+    category = db.Column(db.String())
 
-    def __init__(self, name, price, description, avatarUrl, long, zametki):
+    def __init__(self, name, price, description, avatarUrl, long, zametki, category):
         self.name = name
         self.price = price
         self.description = description
         self.avatarUrl = avatarUrl
         self.long = long
         self.zametki = zametki
+        self.category = category
 
     # def __repr__(self):
     #     abob = [self.name, self.price, self.description, self.avatarUrl, self.long]
@@ -88,8 +90,9 @@ def index():
 
 @app.route('/pricing', methods=['POST', 'GET'])
 def pricing():
-    products = Product.query.all()
-    return render_template('pricing.html', user=current_user, products=products)
+    products = Product.query.filter_by(category='tovar')
+    cars = Product.query.filter_by(category='cars')
+    return render_template('pricing.html', user=current_user, products=products, cars=cars)
 
 
 @app.route('/pricing/<string:name>', methods=['POST', 'GET'])
@@ -163,12 +166,6 @@ def redact():
         new = request.form.get('new')
         print(f'{name} \n{object} \n{new}')
         try:
-            # self.name = name
-            # self.price = price
-            # self.description = description
-            # self.avatarUrl = avatarUrl
-            # self.long = long
-            # self.zametki = zametki
             product = Product.query.filter_by(name=name).first()
             if object.lower() == 'name':
                 product.name = new
@@ -182,6 +179,8 @@ def redact():
                 product.long = new
             elif object.lower() == 'zametki':
                 product.zametki = new
+            elif object.lower() == 'category' or 'cat':
+                product.category = new
             db.session.commit()
             flash('Данные успешно обновлены', category='success')
         except Exception as e:
@@ -226,7 +225,8 @@ def create_product():
         description = request.form.get('description')
         zametki = request.form.get('zametka')
         avatarUrl = request.form.get('url')
-        new_tovar = Product(name=name, price=price, long=long, description=description, zametki=zametki, avatarUrl=avatarUrl)
+        category = request.form.get('category')
+        new_tovar = Product(name=name, price=price, long=long, description=description, zametki=zametki, avatarUrl=avatarUrl, category=category.lower())
         db.session.add(new_tovar)
         db.session.commit()
     return render_template('creation.html', user=current_user)
