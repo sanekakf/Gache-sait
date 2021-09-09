@@ -253,6 +253,19 @@ def server_error(error):
     return render_template('505.html'), 500
 
 
+# Ретёрнывые функции
+@app.route('/delete/<string:name>/', methods=['GET', 'POST'])
+def delete(name):
+    try:
+        Product.query.filter_by(name=name).delete()
+        db.session.commit()
+        flash(f'Предмет {name} был успешно удален!', category='success')
+    except Exception as e:
+        print(e)
+        flash('Ошибка', category='error')
+    return back
+
+
 if __name__ == '__main__':
     db.session.flush()
     login_manager = LoginManager(app)

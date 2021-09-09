@@ -47,7 +47,18 @@
           <hr>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
           <input type="submit" class="btn btn-outline-dark btn-lg px-4 me-md-2 fw-bold" value="Обновить">
+            <div class="dropdown">
+                <button class="btn btn-outline-danger dropdown-toggle btn-lg px-4 me-md-2 fw-bold" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Удалить
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    {% for product in products %}
+                    <li><a class="dropdown-item" href="/delete/{{product.name}}">{{product.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
+
       </div>
     </div>
 </form>
