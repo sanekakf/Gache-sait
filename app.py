@@ -46,14 +46,6 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return (self.id)
 
-    def __repr__(self):
-        abobus = {
-            'login': self.login,
-            'password': self.password,
-            'id': self.id
-        }
-        return f'{self.login}'
-
 
 class Product(db.Model):
     __tablename__ = 'production'
@@ -238,6 +230,13 @@ def clear():
     return redirect(url_for('pricing'))
 
 
+@app.route('/users', methods=['POST', 'GET'])
+def users():
+    persons = User.query.all()
+    print(persons)
+    return render_template('users.html', user=current_user, users=persons)
+
+
 @app.route('/pictures', methods=['POST', 'GET'])
 def pictures():
     return render_template('pictures.html', user=current_user)
@@ -263,6 +262,18 @@ def delete(name):
     except Exception as e:
         print(e)
         flash('Ошибка', category='error')
+    return back
+
+
+@app.route('/users/delete/<string:username>/', methods=['POST', 'GET'])
+def u_delete(username):
+    try:
+        User.query.filter_by(login=username).delete()
+        db.session.commit()
+        flash(f'{username} удалён', category='success')
+    except Exception as e:
+        print(e)
+        flash(e)
     return back
 
 

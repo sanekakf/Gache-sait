@@ -8,3 +8,4 @@ SQLAlchemy
 flask-sqlalchemy
 Flask-Migrate
 hypercorn
+flaskwebgui

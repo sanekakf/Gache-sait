@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %} Юзеры {% endblock %}
+
+{% block body %}
+
+<header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+    <span class="fs-4">О да, время делать fisting</span>
+  </header>
+<main>
+<!--    <div class="container">-->
+<!--        <div class="col">-->
+<!--            <img src="" alt="ava">-->
+<!--        </div>-->
+<!--        <div class="col-10 col-sm-8 col-lg-6">-->
+<!--        <img class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy">-->
+<!--      </div>-->
+<!--        <div class="row">-->
+<!--            <h1>user.name</h1>-->
+<!--            <p class="fs-5 col-md-8">человек</p>-->
+<!--        </div>-->
+<!--    </div>-->
+    {% for user in users %}
+<div class="row flex-lg-row-reverse align-items-center g-3 py-3">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold lh-1 mb-3">{{ user.login }}</h1>
+        <p class="lead"><span style="font-family: 'Roboto Mono', monospace;">Предметов: 0 <br> Знакомых: 0 <br> bucks: 0</span></p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <a href="/users/delete/{{user.login}}" class="btn btn-danger btn-lg px-4 me-sm-3">Удалить человека #future</a>
+        </div>
+      </div>
+      <div class="col-10 col-sm-8 col-lg-6">
+        <img src="{{ user.avatarUrl }}" class="d-block mx-lg-auto img-fluid rounded-3" alt="User.avatarUrl" width="600" height="600" loading="lazy">
+      </div>
+    </div>
+    {% endfor %}
+</main>
+
+{% endblock %}

@@ -59,10 +59,10 @@
         {% if user.is_authenticated %}
         <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-user-o" aria-hidden="true"></i> {{user}}
+                <i class="fa fa-user-o" aria-hidden="true"></i> {{user.login}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item" href="/home/{{user}}">Домой в Gym</a></li>
+                <li><a class="dropdown-item" href="/home/{{user.login}}">Домой в Gym</a></li>
                 <li><a class="dropdown-item disabled"><i class="fa fa-address-card-o link-info" aria-hidden="true"></i> В разработке...</a></li>
                 {% if user.login == 'sanekakf' %}
                 <li><hr class="dropdown-divider"></li>
@@ -92,13 +92,13 @@
   {% if category == 'error' %}
     <div class="alert alert-danger alter-dismissible fade show" role="alert">
       {{ message }}
-      <button type="button" class="btn-close" data-dismiss="alert">
+      <button type="button" class="btn-close" data-bs-dismiss="alert">
       </button>
     </div>
     {% else %}
     <div class="alert alert-success alter-dismissible fade show" role="alert">
       {{ message }}
-      <button type="button" class="btn-close" data-dismiss="alert">
+      <button type="button" class="btn-close" data-bs-dismiss="alert">
       </button>
     </div>
     {% endif %}
