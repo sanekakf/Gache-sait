@@ -88,7 +88,7 @@ class Partner(db.Model):
 def index():
     return render_template('main.html', user=current_user)
 
-
+#
 # CTG: Партнерства
 @app.route('/partnerships', methods=['POST', 'GET'])
 def partners():
