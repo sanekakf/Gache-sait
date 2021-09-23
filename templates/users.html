@@ -8,18 +8,6 @@
     <span class="fs-4">О да, время делать fisting</span>
   </header>
 <main>
-<!--    <div class="container">-->
-<!--        <div class="col">-->
-<!--            <img src="" alt="ava">-->
-<!--        </div>-->
-<!--        <div class="col-10 col-sm-8 col-lg-6">-->
-<!--        <img class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" loading="lazy">-->
-<!--      </div>-->
-<!--        <div class="row">-->
-<!--            <h1>user.name</h1>-->
-<!--            <p class="fs-5 col-md-8">человек</p>-->
-<!--        </div>-->
-<!--    </div>-->
     {% for user in users %}
 <div class="row flex-lg-row-reverse align-items-center g-3 py-3">
     <div class="col-lg-6">
@@ -30,7 +18,7 @@
         </div>
       </div>
       <div class="col-10 col-sm-8 col-lg-6">
-        <img src="{{ user.avatarUrl }}" class="d-block mx-lg-auto img-fluid rounded-3" alt="User.avatarUrl" width="600" height="600" loading="lazy">
+        <img src="{{ user.avatarUrl }}" class="d-block mx-lg-auto img-fluid rounded-3" alt="Пользовательский Аватар" width="600" height="600" loading="lazy">
       </div>
     </div>
     {% endfor %}

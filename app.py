@@ -31,6 +31,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
+# CTG: Модели таблиц
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
@@ -67,19 +68,36 @@ class Product(db.Model):
         self.zametki = zametki
         self.category = category
 
-    # def __repr__(self):
-    #     abob = [self.name, self.price, self.description, self.avatarUrl, self.long]
-    #     return abob
-    # def __str__(self):
-    #     abob = [self.name, self.price, self.description, self.avatarUrl, self.long]
-    #     return abob
+class Partner(db.Model):
+    __tablename__ = 'partners'
+
+    name = db.Column(db.String(), unique=True, primary_key=True)
+    description = db.Column(db.String())
+    avatarUrl = db.Column(db.String())
+    members = db.Column(db.Integer())
+
+    def __init__(self, name, description, avatarUrl, members):
+        self.name = name
+        self.description = description
+        self.avatarUrl = avatarUrl
+        self.members = members
 
 
+# CTG: главная страница
 @app.route('/', methods=['POST', 'GET'])
 def index():
     return render_template('main.html', user=current_user)
 
 
+# CTG: Партнерства
+@app.route('/partnerships', methods=['POST', 'GET'])
+def partners():
+    partnerships = Partner.query.all()
+    return render_template('partnerships.html', user=current_user, parthnersities=partnerships)
+
+
+
+# CTG: Страницы покупок
 @app.route('/pricing', methods=['POST', 'GET'])
 def pricing():
     products = Product.query.filter_by(category='tovar')
@@ -88,16 +106,12 @@ def pricing():
 
 
 @app.route('/pricing/<string:name>', methods=['POST', 'GET'])
-def product(name):
+def shop(name):
     product = Product.query.filter_by(name=name).first()
     return render_template('product.html', user=current_user, product=product)
 
 
-@app.route('/about', methods=['POST', 'GET'])
-def about():
-    return render_template('about.html', user=current_user)
-
-
+# CTG: Логин регистрация
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -120,6 +134,7 @@ def login():
         except Exception as e:
             print(e)
             flash(f'{e}', category='error')
+    flash('Страница входа | регистрации временно не работает', category='error')
     return render_template('admin.html', user=current_user)
 
 
@@ -150,6 +165,13 @@ def register():
     return render_template('register.html', user=current_user)
 
 
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    logout_user()
+    return redirect('/')
+
+
+# CTG: "админ" страницы
 @app.route('/redact', methods=['POST', 'GET'])
 def redact():
     if request.method == 'POST':
@@ -179,17 +201,6 @@ def redact():
             print(e)
             flash(e)
     return render_template('redact.html', user=current_user, products=Product.query.all())
-
-
-@app.route('/update', methods=['POST', 'GET'])
-def update():
-    return render_template('update_log.html', user=current_user)
-
-
-@app.route('/logout', methods=['POST', 'GET'])
-def logout():
-    logout_user()
-    return redirect('/')
 
 
 @app.route('/home/<string:login>/', methods=['POST', 'GET'])
@@ -230,39 +241,12 @@ def clear():
     return redirect(url_for('pricing'))
 
 
+# CTG: "страницы людей"
 @app.route('/users', methods=['POST', 'GET'])
 def users():
     persons = User.query.all()
     print(persons)
     return render_template('users.html', user=current_user, users=persons)
-
-
-@app.route('/pictures', methods=['POST', 'GET'])
-def pictures():
-    return render_template('pictures.html', user=current_user)
-
-# обработка ошибочных страниц
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('404.html'), 404
-
-
-@app.errorhandler(500)
-def server_error(error):
-    return render_template('505.html'), 500
-
-
-# Ретёрнывые функции
-@app.route('/delete/<string:name>/', methods=['GET', 'POST'])
-def delete(name):
-    try:
-        Product.query.filter_by(name=name).delete()
-        db.session.commit()
-        flash(f'Предмет {name} был успешно удален!', category='success')
-    except Exception as e:
-        print(e)
-        flash('Ошибка', category='error')
-    return back
 
 
 @app.route('/users/delete/<string:username>/', methods=['POST', 'GET'])
@@ -277,6 +261,42 @@ def u_delete(username):
     return back
 
 
+# CTG: Доп. файлы
+@app.route('/pictures', methods=['POST', 'GET'])
+def pictures():
+    return render_template('pictures.html', user=current_user)
+
+
+# CTG: обработка ошибочных страниц
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def server_error(error):
+    return render_template('505.html'), 500
+
+
+# CTG: Ретёрнывые функции
+@app.route('/delete/<string:name>/', methods=['GET', 'POST'])
+def delete(name):
+    try:
+        Product.query.filter_by(name=name).delete()
+        db.session.commit()
+        flash(f'Предмет {name} был успешно удален!', category='success')
+    except Exception as e:
+        print(e)
+        flash('Ошибка', category='error')
+    return back
+
+
+# CTG: Одиночные страницы
+@app.route('/about', methods=['POST', 'GET'])
+def about():
+    return render_template('about.html', user=current_user)
+
+
 if __name__ == '__main__':
     db.session.flush()
     login_manager = LoginManager(app)
@@ -286,8 +306,9 @@ if __name__ == '__main__':
     def load_user(user_id):
         try:
             return User.query.get(user_id)
-        except:
+        except Exception as e:
+            print(e)
             return None
-    login_manager.init_app(app)
 
+    login_manager.init_app(app)
     app.run(debug=True, host='0.0.0.0', port=5000)
